@@ -34,6 +34,35 @@ jobs:
             exit 1
           fi
           echo "✅ Version check passed: $version"
+      - name: Check package layout
+        run: |
+          # The upstream archive layout has to survive intact in $out, because
+          # codex derives its resource directories from it at runtime.
+          for f in \
+            bin/codex \
+            libexec/codex/codex-package.json \
+            libexec/codex/bin/codex \
+            libexec/codex/bin/codex-code-mode-host \
+            libexec/codex/codex-path/rg \
+            libexec/codex/codex-resources/zsh/bin/zsh
+          do
+            test -e "result/$f" || { echo "Error: missing $f"; exit 1; }
+          done
+          if [ "$RUNNER_OS" = Linux ]; then
+            test -x result/libexec/codex/codex-resources/bwrap \
+              || { echo "Error: missing codex-resources/bwrap"; exit 1; }
+          fi
+          echo "✅ package layout intact"
+
+      - name: Check patched zsh runs
+        if: runner.os == 'Linux'
+        run: |
+          # The bundled zsh fork is the only dynamically linked binary in the
+          # archive, so it is the one that patchelf has to get right.
+          out=$(./result/libexec/codex/codex-resources/zsh/bin/zsh -c 'echo ok')
+          test "$out" = ok || { echo "Error: bundled zsh did not run"; exit 1; }
+          echo "✅ bundled zsh runs"
+
       - name: Check bundled resources resolve
         run: |
           # codex locates its bundled rg, bwrap and patched zsh relative to the
