@@ -62,7 +62,12 @@ stdenv.mkDerivation {
     lib.optionalString stdenv.hostPlatform.isLinux ''
       patchelf \
         --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
-        --set-rpath ${lib.makeLibraryPath [ stdenv.cc.libc ncurses ]} \
+        --set-rpath ${
+          lib.makeLibraryPath [
+            stdenv.cc.libc
+            ncurses
+          ]
+        } \
         "$out/libexec/codex/codex-resources/zsh/bin/zsh"
     ''
     + lib.optionalString (additionalPaths != [ ]) ''

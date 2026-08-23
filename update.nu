@@ -12,7 +12,6 @@
 # https://github.com/ryoppippi/nix-claude-code/blob/main/update.nu
 
 const script_dir = (path self .)
-
 const RELEASES_API = "https://api.github.com/repos/openai/codex/releases"
 const DOWNLOAD_BASE = "https://github.com/openai/codex/releases/download"
 const CHECKSUM_ASSET = "codex-package_SHA256SUMS"
@@ -54,7 +53,7 @@ def semver-gte [
 # GitHub's unauthenticated rate limit is 60 requests/hour, which the release
 # listing can exhaust on a busy repository. Use GITHUB_TOKEN when CI provides it.
 def gh-get [url: string]: nothing -> any {
-    let token = ($env.GITHUB_TOKEN? | default "")
+    let token = $env.GITHUB_TOKEN? | default ""
     match ($token | is-empty) {
         true => { http get $url }
         false => { http get --headers [Authorization $"Bearer ($token)"] $url }
@@ -146,7 +145,9 @@ def write-version-sources [
 def as-text []: any -> string {
     let value = $in
     match ($value | describe) {
-        "binary" => { $value | decode utf-8 }
+        "binary" => {
+            $value | decode utf-8
+        }
         _ => { $value }
     }
 }
@@ -157,7 +158,7 @@ def parse-checksums [text: string]: nothing -> table<name: string, hex: string> 
     | lines
     | where {|line| ($line | str trim) != "" }
     | each {|line|
-        let parts = ($line | str trim | split row -r '\s+')
+        let parts = $line | str trim | split row -r '\s+'
         {name: ($parts | get 1), hex: ($parts | get 0)}
     }
 }
@@ -175,13 +176,13 @@ def process-version [version: string]: nothing -> bool {
     match $checksums {
         null => false
         _ => {
-            let digests = (parse-checksums ($checksums | as-text))
+            let digests = parse-checksums ($checksums | as-text)
 
             let results = (
                 $platforms
                 | items {|nix_system, target|
                     let asset = $"codex-package-($target).tar.gz"
-                    let row = ($digests | where name == $asset | get -o 0)
+                    let row = $digests | where name == $asset | get -o 0
                     match $row {
                         null => {
                             print -e $"  Skipping ($version): no digest for ($asset)"

@@ -149,7 +149,7 @@ codex --version
 }
 ```
 
-The overlay is evaluated against *your* nixpkgs, so adding it does not pull a second nixpkgs into your closure.
+The overlay is evaluated against _your_ nixpkgs, so adding it does not pull a second nixpkgs into your closure.
 
 ### Without Flakes
 
@@ -165,13 +165,13 @@ import codex-cli-nix { inherit pkgs; }
 
 ## Available Packages
 
-| Attribute                             | Description                              |
-| ------------------------------------- | ---------------------------------------- |
-| `packages.${system}.default`          | Latest tracked release (same as `codex`) |
-| `packages.${system}.codex`            | Latest tracked release                   |
-| `packages.${system}.latest`           | Latest tracked release                   |
-| `packages.${system}."<version>"`      | A specific version, e.g. `"0.147.0"`     |
-| `pkgs.codex` (overlay)                | Latest tracked release                   |
+| Attribute                        | Description                              |
+| -------------------------------- | ---------------------------------------- |
+| `packages.${system}.default`     | Latest tracked release (same as `codex`) |
+| `packages.${system}.codex`       | Latest tracked release                   |
+| `packages.${system}.latest`      | Latest tracked release                   |
+| `packages.${system}."<version>"` | A specific version, e.g. `"0.147.0"`     |
+| `pkgs.codex` (overlay)           | Latest tracked release                   |
 
 ### Version Pinning
 
