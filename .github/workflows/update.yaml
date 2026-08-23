@@ -1,0 +1,28 @@
+name: update-sources
+on:
+  schedule:
+    - cron: '0 * * * *' # Run every hour
+  workflow_dispatch:
+jobs:
+  update-sources:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/setup-nix
+      - id: update
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(./update.nu | tail -1)
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+      - run: 'git config user.email 41898282+github-actions[bot]@users.noreply.github.com'
+      - run: 'git config user.name github-actions[bot]'
+      - run: 'git add -A'
+      - name: Commit with version
+        run: |
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: update codex to ${{ steps.update.outputs.version }}"
+          fi
+      - run: 'git push -u origin main'

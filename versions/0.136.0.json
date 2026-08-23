@@ -1,0 +1,21 @@
+{
+	"version": "0.136.0",
+	"platforms": {
+		"x86_64-linux": {
+			"url": "https://github.com/openai/codex/releases/download/rust-v0.136.0/codex-package-x86_64-unknown-linux-musl.tar.gz",
+			"hash": "sha256-W/ZhNWpoyJfZaZfiplpW1K1/+k9PhbbdRFBqboEY8HI="
+		},
+		"aarch64-linux": {
+			"url": "https://github.com/openai/codex/releases/download/rust-v0.136.0/codex-package-aarch64-unknown-linux-musl.tar.gz",
+			"hash": "sha256-LzMvB7QBm++HqETUqMP0+uJokSxablD9igOIth0SXRU="
+		},
+		"x86_64-darwin": {
+			"url": "https://github.com/openai/codex/releases/download/rust-v0.136.0/codex-package-x86_64-apple-darwin.tar.gz",
+			"hash": "sha256-RwHg95smreU2b7l/LArBmb6AGTE4duNZYSZYpiLqlXE="
+		},
+		"aarch64-darwin": {
+			"url": "https://github.com/openai/codex/releases/download/rust-v0.136.0/codex-package-aarch64-apple-darwin.tar.gz",
+			"hash": "sha256-HznPVxwaX3ubuwmgYeidrhHEFaANiLJuxIisAwcUdQA="
+		}
+	}
+}
